@@ -1,7 +1,16 @@
 -- @nsURI Java=http://www.eclipse.org/MoDisco/Java/0.2.incubation/java
--- @path Data=/tp.fil/src/tp/fil/resources/Data.ecore
+-- @path Data=/IMT-Retro-engineering/src/tp/fil/resources/Data.ecore
 
 module DataComputation;
 create OUT : Data from IN : Java;
+
+rule ClassDeclarationToClasse {
+	from s:
+		Java!ClassDeclaration
+	to t:
+		Data!Classe (
+			 nom <- s.name
+		)		
+}
 
 -- TO BE COMPLETED
