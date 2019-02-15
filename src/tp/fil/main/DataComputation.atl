@@ -8,27 +8,30 @@ endpoint rule Modele() {
 	to t:
 		Data!Modele (
 			classes <- Java!ClassDeclaration.allInstances()
+							->select(elem | if elem.package = OclUndefined then false else elem.package.name = 'model' endif)
+							->collect(elem | thisModule.ClassDeclarationToClasse(elem))
 		)
 }
 
-rule ClassDeclarationToClasse {
+lazy rule ClassDeclarationToClasse {
 	from s:
 		Java!ClassDeclaration
-		(if s.package = OclUndefined then false else s.package.name = 'model' endif)
 	to t:
 		Data!Classe (
 			 nom <- s.name,
 			 attributs <- s.bodyDeclarations
+			                 ->select(x | x.oclType() = Java!FieldDeclaration)
+							 ->collect(x | thisModule.FieldDeclarationToAttribut(x))
 		)		
 }
 
-rule FieldDeclarationToAttribut {
+lazy rule FieldDeclarationToAttribut {
 	from s:
 		Java!FieldDeclaration
 	to t:
 		Data!Attribut (
 			nom <- s.fragments.first().name,
 			estTableau <- false,
-			typeStr <- if s.type = OclUndefined then 'RIEN' else s.type.type.name endif
+			typeStr <- if s.type = OclUndefined then 'NON_CONNU' else s.type.type.name endif
 		)
 }

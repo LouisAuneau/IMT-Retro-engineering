@@ -3,7 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="Data" nsURI="http://data" nsPrefix="data">
   <eClassifiers xsi:type="ecore:EClass" name="Classe" eSuperTypes="#//DeclarationType">
     <eStructuralFeatures xsi:type="ecore:EReference" name="attributs" upperBound="-1"
-        eType="#//Attribut"/>
+        eType="#//Attribut" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Attribut">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
@@ -13,11 +13,11 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeStr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DeclarationType">
+  <eClassifiers xsi:type="ecore:EClass" name="DeclarationType" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Modele">
     <eStructuralFeatures xsi:type="ecore:EReference" name="classes" upperBound="-1"
-        eType="#//Classe"/>
+        eType="#//Classe" containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

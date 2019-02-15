@@ -1,8 +1,11 @@
 package tp.fil.main;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -15,9 +18,8 @@ public class DataComputation {
 	
 	public static void main(String[] args) {
 		try {
-			Resource javaModel;
-			Resource dataModel;
-			Resource dataMetamodel;
+			Resource sourceM;
+			Resource targetMM;
 			
 			ResourceSet resSet = new ResourceSetImpl();
 			resSet.getResourceFactoryRegistry().
@@ -29,34 +31,25 @@ public class DataComputation {
 			
 			JavaPackage.eINSTANCE.eClass();
 			
-			dataMetamodel = resSet.createResource(URI.createFileURI("src/tp/fil/resources/Data.ecore"));
-			dataMetamodel.load(null);
+			targetMM = resSet.createResource(URI.createFileURI("src/tp/fil/resources/Data.ecore"));
+			targetMM.load(null);
 			EPackage.Registry.INSTANCE.put("http://data", 
-					dataMetamodel.getContents().get(0));
+					targetMM.getContents().get(0));
 			
-			javaModel = resSet.createResource(URI.createFileURI("../PetStore/PetStore_java.xmi"));
-			javaModel.load(null);
+			sourceM = resSet.createResource(URI.createFileURI("../PetStore/PetStore_java.xmi"));
+			sourceM.load(null);
 			
-			dataModel = resSet.createResource(URI.createFileURI("../PetStore/PetStore_data.xmi"));
+			DataTransformation dt = new DataTransformation(resSet, targetMM, sourceM);
+			Resource targetM = dt.runTransformation("../PetStore/data_java.xmi");
+			targetM.save(null);
 			
-			/*
-			 * Beginning of the part to be completed...
-			 */
-			
-			//TO BE COMPLETED
-			
-			/*
-			 * End of the part to be completed...
-			 */
-			
-			dataModel.save(null);
-			
-			javaModel.unload();
-			dataModel.unload();
+			sourceM.unload();
+			targetMM.unload();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
+	
 	
 }
