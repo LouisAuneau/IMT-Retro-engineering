@@ -5,11 +5,27 @@
 [template public generateSQL(modele : Modele)]
 [comment @main/] 
 [file ('PetStore_database.sql', false, 'UTF-8')]
-	
-	[for (classe : Classe | modele.classes)]
-		[classe.nom /]
-	[/for]
-	[comment TO BE COMPLETED/]
 
+	[for (classe : Classe | modele.classes)]
+
+		[let nbAttributes : Integer = classe.attributs->size()]
+CREATE TABLE [classe.nom /] (
+		[for (attribut : Attribut | classe.attributs)]
+	[attribut.nom /] [generateSQLType(attribut.typeStr)/][if not(i = nbAttributes)],[/if]
+		[/for]
+		[/let]
+)
+
+	[/for]
 [/file]
+[/template]
+
+[template private generateSQLType(type: String) post (trim())]
+	[if (type = 'String')]
+		VARCHAR(255)
+	[elseif (type = 'int' or type = 'Integer')]
+		INT
+	[elseif (type = 'double' or type = 'Double')]
+		DOUBLE
+	[/if]
 [/template]
