@@ -21,11 +21,11 @@ CREATE TABLE [classe.nom /] (
 [/template]
 
 [template private generateSQLType(type: String) post (trim())]
-	[if (type = 'String')]
+	[if (type = 'string')]
 		VARCHAR(255)
-	[elseif (type = 'int' or type = 'Integer')]
+	[elseif (type = 'int' or type = 'integer')]
 		INT
-	[elseif (type = 'double' or type = 'Double')]
+	[elseif (type = 'double' or type = 'double')]
 		DOUBLE
 	[/if]
 [/template]

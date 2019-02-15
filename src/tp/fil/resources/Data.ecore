@@ -8,12 +8,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="Attribut">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="declarationType" lowerBound="1"
-        eType="#//DeclarationType"/>
+        eType="#//Classe"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="estTableau" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeStr" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DeclarationType" abstract="true">
+  <eClassifiers xsi:type="ecore:EClass" name="DeclarationType">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="nom" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Modele">

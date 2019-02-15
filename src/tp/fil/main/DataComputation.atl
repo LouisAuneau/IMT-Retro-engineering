@@ -8,12 +8,10 @@ endpoint rule Modele() {
 	to t:
 		Data!Modele (
 			classes <- Java!ClassDeclaration.allInstances()
-							->select(elem | if elem.package = OclUndefined then false else elem.package.name = 'model' endif)
-							->collect(elem | thisModule.ClassDeclarationToClasse(elem))
 		)
 }
 
-lazy rule ClassDeclarationToClasse {
+rule ClassDeclarationToClasse {
 	from s:
 		Java!ClassDeclaration
 	to t:
@@ -31,7 +29,52 @@ lazy rule FieldDeclarationToAttribut {
 	to t:
 		Data!Attribut (
 			nom <- s.fragments.first().name,
-			estTableau <- false,
-			typeStr <- if s.type = OclUndefined then 'NON_CONNU' else s.type.type.name endif
+			
+			estTableau <- if s.type = OclUndefined 
+			               then false 
+						   else if s.type.type.name.toLower().regexReplaceAll('(.*)(collection|list)(.*)', 'true') = 'true'
+						            then true
+									else false
+								endif
+					   endif,
+			
+			typeStr <- if s.type = OclUndefined 
+			               then 'unknown' 
+						   else s.type.type.name.toLower() 
+					   endif,
+					   
+			declarationType <- 
+			           if s.type = OclUndefined 
+					       then OclUndefined 
+						   else thisModule.parseDeclarationType(s.type.type.name.toLower()) 
+					   endif
 		)
 }
+
+helper def: parseDeclarationType(typeStr : String) : Java!ClassDeclaration =
+	-- If type is primitive, declaration type is empty
+	if not (thisModule.primitiveTypeMap.get(typeStr) = OclUndefined) then
+		OclUndefined
+	else -- else, get the corresponding class
+		-- if type is an array
+		if typeStr.regexReplaceAll('(.*)(collection|list)(.*)', 'true') = 'true'
+			then
+				Java!ClassDeclaration.allInstances()->any(elem | elem.name.toLower() = typeStr.regexReplaceAll('(.*)\\.(.*)>', '$2'))
+			else
+				Java!ClassDeclaration.allInstances()->any(elem | elem.name.toLower() = typeStr)
+			endif
+	endif
+	;
+ 	
+helper def : primitiveTypeMap : Map(String, Boolean) =
+	Map
+	{
+		('string', true),
+		('unknown', true),
+		('integer', true),
+		('int', true),
+		('double', true),
+		('bigdecimal', true)
+	}
+	;
+	
