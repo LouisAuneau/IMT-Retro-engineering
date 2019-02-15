@@ -23,5 +23,5 @@
 [comment] Génère l'image du diagramme UML pour la classe donnée [/comment]
 [template private generateClasse(classe : Classe) post (trim())]
 [comment]C'est moche[/comment]
-<img src="http://yuml.me/diagram/scruffy/class/['['/][classe.nom/]['|'/][for (attribut : Attribut | classe.attributs) ][attribut.nom /][': '/][attribut.typeStr /][if not(i = classe.attributs->size())]; [/if][/for][']'/]" >
+<img src="http://yuml.me/diagram/scruffy/class/['['/][classe.nom/]['|'/][for (attribut : Attribut | classe.attributs) ][attribut.nom /][': '/][if (attribut.typeStr.toString().contains('Collection'))]Liste[else][attribut.typeStr /][/if][if not(i = classe.attributs->size())]; [/if][/for][']'/]" >
 [/template]
