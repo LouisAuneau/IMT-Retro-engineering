@@ -8,20 +8,35 @@
 
 <!DOCTYPE html>
 <head>
-	<title>Diagramme de classes du mod√®le de PetStore </title>
+	<title>Diagramme de classes du modËle de PetStore </title>
 	<meta charset="utf-8" />
 </head>/
 	
 <body>
-	[for (classe: Classe | modele.classes)]
-	[ classe.generateClasse(classe) /]
-	[/for]
+<img src="http://yuml.me/diagram/scruffy/class/[for (classe: Classe | modele.classes)][ classe.generateClasse(classe) /][/for]"/>
 </body>
 [/file]
 [/template]
 
-[comment] G√©n√®re l'image du diagramme UML pour la classe donn√©e [/comment]
-[template private generateClasse(classe : Classe) post (trim())]
-[comment]C'est moche[/comment]
-<img src="http://yuml.me/diagram/scruffy/class/['['/][classe.nom/]['|'/][for (attribut : Attribut | classe.attributs) ][attribut.nom /][': '/][if (attribut.typeStr.toString().contains('Collection'))]Liste[else][attribut.typeStr /][/if][if not(i = classe.attributs->size())]; [/if][/for][']'/]" >
+[comment] GÈnerer l'image du diagramme UML pour la classe donnÈe [/comment]
+[template private generateClasse(classe : Classe) post(replaceAll('\t', '').replaceAll('\r\n', '').trim())]
+['['/][classe.nom/]['|'/]
+[for (attribut : Attribut | classe.attributs) ]
+	[attribut.nom /][': '/]
+	[if (attribut.estTableau)]
+		Liste
+	[else]
+		[attribut.typeStr /]
+	[/if]
+	[if not(i = classe.attributs->size())]
+		; 
+	[/if]
+[/for]
+[']'/],
+[for (attribut : Attribut | classe.attributs) ]
+	[if (not attribut.declarationType.oclIsUndefined())]
+		['['/][classe.nom/][']'/]-[attribut.nom/][if (attribut.estTableau)]*[/if]>['['/][attribut.declarationType.nom/][']'/],
+	[/if]
+[/for]
+
 [/template]

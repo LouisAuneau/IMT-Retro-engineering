@@ -8,6 +8,7 @@ endpoint rule Modele() {
 	to t:
 		Data!Modele (
 			classes <- Java!ClassDeclaration.allInstances()
+			             ->select(elem | if elem.package = OclUndefined then false else elem.package.name = 'model' endif)
 		)
 }
 
@@ -70,6 +71,7 @@ helper def : primitiveTypeMap : Map(String, Boolean) =
 	Map
 	{
 		('string', true),
+		('boolean', true),
 		('unknown', true),
 		('integer', true),
 		('int', true),
