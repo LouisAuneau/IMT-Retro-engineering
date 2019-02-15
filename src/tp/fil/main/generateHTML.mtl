@@ -5,8 +5,23 @@
 [template public generateHTML(modele : Modele)]
 [comment @main/]  
 [file ('PetStore_rendering.html', false, 'UTF-8')]
-	
-	[comment TO BE COMPLETED/]
 
+<!DOCTYPE html>
+<head>
+	<title>Diagramme de classes du modèle de PetStore </title>
+	<meta charset="utf-8" />
+</head>/
+	
+<body>
+	[for (classe: Classe | modele.classes)]
+	[ classe.generateClasse(classe) /]
+	[/for]
+</body>
 [/file]
+[/template]
+
+[comment] Génère l'image du diagramme UML pour la classe donnée [/comment]
+[template private generateClasse(classe : Classe) post (trim())]
+[comment]C'est moche[/comment]
+<img src="http://yuml.me/diagram/scruffy/class/['['/][classe.nom/]['|'/][for (attribut : Attribut | classe.attributs) ][attribut.nom /][': '/][attribut.typeStr /][if not(i = classe.attributs->size())]; [/if][/for][']'/]" >
 [/template]
